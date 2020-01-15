@@ -10,6 +10,22 @@
 library(shiny)
 library(PCArt)
 
+get_list_of_images <- function(database = NULL) {
+    if (is.null(database)) data('database1', envir = environment(), package = 'PCArt')
+    else load(database, envir = environment())
+    
+    img_ind <- unlist(eapply(environment(), function(x) class(x) == 'PCArtImage'))
+    
+    image_names <- names(img_ind)[img_ind]
+    images <- list()
+    
+    for (i in image_names) {
+        images <- append(images, list(get(i)))
+    }
+    
+    return(images)
+}
+
 images <- get_list_of_images()
 
 # Define UI for application that draws a histogram
@@ -49,7 +65,7 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     output$pcaPlot <- renderPlot({
-        pca_plot(images[[input$image_no]]$image, input$components)
+        PCArt:::pca_plot(images[[input$image_no]]$image, input$components)
     })
     
     output$details <- renderText({
