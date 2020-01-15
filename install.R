@@ -6,4 +6,4 @@ install.packages("shiny")
 
 # external packages
 install.packages("remotes")
-remotes::install_github("dfv-ms/PCArt")
+remotes::install_github("martscht/PCArt")
