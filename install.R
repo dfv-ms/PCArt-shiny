@@ -4,3 +4,4 @@
 # Shiny
 install.packages("shiny")
 
+remotes::install_github("dfv-ms/PCArt")
