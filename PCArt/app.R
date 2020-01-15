@@ -25,11 +25,13 @@ ui <- fluidPage(
                         "Number of components:",
                         min = 1,
                         max = 25,
+                        step = 1,
                         value = 1),
             sliderInput("image_no",
                         "Number of image:",
                         min = 1,
                         max = length(images),
+                        step = 1,
                         value = 1),
             checkboxInput("showDetails", "show details", FALSE)
             
