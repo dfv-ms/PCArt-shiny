@@ -8,26 +8,37 @@
 #
 
 library(shiny)
+library(PCArt)
+
+images <- get_list_of_images()
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("PCA Demo"),
 
-    # Sidebar with a slider input for number of bins 
+    # Sidebar with a slider input for number of components and images
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
+            sliderInput("components",
+                        "Number of components:",
                         min = 1,
-                        max = 50,
-                        value = 30)
+                        max = 25,
+                        value = 1),
+            sliderInput("image_no",
+                        "Number of image:",
+                        min = 1,
+                        max = length(images),
+                        value = 1),
+            checkboxInput("showDetails", "show details", FALSE)
+            
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+           plotOutput("pcaPlot"),
+           verbatimTextOutput("details")
         )
     )
 )
@@ -35,14 +46,19 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    output$pcaPlot <- renderPlot({
+        pca_plot(images[[input$image_no]]$image, input$components)
     })
+    
+    output$details <- renderText({
+        if(input$showDetails) {
+            paste0(images[[input$image_no]]$title, " by ", images[[input$image_no]]$artist)
+        }else{
+            ""
+        }
+    })
+    
+    
 }
 
 # Run the application 
